@@ -1,5 +1,6 @@
 package com.github.tkutcher.jgrade.gradedtest;
 
+import com.github.tkutcher.jgrade.Constants;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -120,7 +121,11 @@ public class GradedTestListener extends RunListener {
         super.testFinished(description);
 
         if (this.currentGradedTestResult != null) {
-            this.currentGradedTestResult.addOutput(testOutput.toString());
+            String output = testOutput.toString();
+            if (output.length() > Constants.CONSOLE_OUTPUT_MAX_LENGTH) {
+                output = output.substring(0, Constants.CONSOLE_OUTPUT_MAX_LENGTH) + " (...output truncated)";
+            }
+            this.currentGradedTestResult.addOutput(output);
             this.gradedTestResults.add(this.currentGradedTestResult);
         }
 
